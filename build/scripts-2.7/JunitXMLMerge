@@ -1,0 +1,5 @@
+#!/Users/zzhou/Documents/VirtuanEnvs/debug_helmut/bin/Python
+
+from junit_report_merge.merge_result import main
+
+main()

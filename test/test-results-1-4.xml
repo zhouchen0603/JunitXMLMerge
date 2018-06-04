@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="0" tests="1" time="48.785"><testcase classname="test_SQA_6614.TestSQA6614" file="test_SQA_6614.py" line="19" name="test_sqa_6614" time="48.5086138248"><failure message="UnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 4823-4826: ordinal not in range(128)">self = &lt;customer_case_minty.test_SQA_6614.TestSQA6614 object at 0x3c5ec10&gt;
+remoteSingleInstance = &lt;helmut.splunk.ssh.SSHSplunk object at 0x3c5e850&gt;
+
+    @SplunkTest(jira=&apos;DVPL-7312&apos;)
+    def test_sqa_6614(self, remoteSingleInstance):
+        splunk = remoteSingleInstance
+        if not splunk.is_running():
+            splunk.start()
+        global PASSCHANGED
+        if not PASSCHANGED:
+            splunk.change_password(splunk.username, splunk.password, PASSWORD)
+            PASSCHANGED = True
+    
+        splunk.confs()[&quot;inputs&quot;].create_stanza(&apos;monitor://$SPLUNK_HOME/etc/splunk.version&apos;)
+&gt;       splunk.confs()[&quot;inputs&quot;][&apos;monitor://$SPLUNK_HOME/etc/splunk.version&apos;][&apos;sourcetype&apos;]=&apos;4我是中文&apos;
+
+test_SQA_6614.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tmp/tmp_job_ven/lib/python2.7/site-packages/helmut/manager/confs/sdk/stanza.py:43: in __setitem__
+    self.raw_sdk_stanza.refresh()
+/tmp/tmp_job_ven/lib/python2.7/site-packages/splunklib/client.py:1026: in refresh
+    self._state = self.read(self.get())
+/tmp/tmp_job_ven/lib/python2.7/site-packages/splunklib/client.py:1086: in read
+    results = self._load_state(response)
+/tmp/tmp_job_ven/lib/python2.7/site-packages/splunklib/client.py:949: in _load_state
+    entry = self._load_atom_entry(response)
+/tmp/tmp_job_ven/lib/python2.7/site-packages/splunklib/client.py:941: in _load_atom_entry
+    elem = _load_atom(response, XNAME_ENTRY)
+/tmp/tmp_job_ven/lib/python2.7/site-packages/splunklib/client.py:197: in _load_atom
+    return data.load(response.body.read().decode(&apos;utf-8&apos;), match)
+/tmp/tmp_job_ven/lib/python2.7/site-packages/splunklib/data.py:79: in load
+    root = XML(text)
+/usr/lib64/python2.7/xml/etree/ElementTree.py:1300: in XML
+    parser.feed(text)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;xml.etree.ElementTree.XMLParser object at 0x3d0f410&gt;
+data = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!--This is to override browser formatting; see server.conf[httpServer] to dis...ex&quot;&gt;_internal&lt;/s:key&gt;
+        &lt;s:key name=&quot;sourcetype&quot;&gt;4我是中文&lt;/s:key&gt;
+      &lt;/s:dict&gt;
+    &lt;/content&gt;
+  &lt;/entry&gt;
+&lt;/feed&gt;&apos;
+
+    def feed(self, data):
+        try:
+&gt;           self._parser.Parse(data, 0)
+E           UnicodeEncodeError: &apos;ascii&apos; codec can&apos;t encode characters in position 4823-4826: ordinal not in range(128)
+
+/usr/lib64/python2.7/xml/etree/ElementTree.py:1640: UnicodeEncodeError</failure></testcase></testsuite>
